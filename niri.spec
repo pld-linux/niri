@@ -13,6 +13,12 @@ BuildRequires:	Mesa-libgbm-devel
 BuildRequires:	cairo-devel
 BuildRequires:	cairo-gobject-devel
 BuildRequires:	cargo
+BuildRequires:	clang
+%ifnarch x32
+BuildRequires:	clang-devel
+%else
+BuildRequires:	clang-devel(x86-64)
+%endif
 BuildRequires:	libdisplay-info-devel >= 0.2
 BuildRequires:	libinput-devel >= 1.21.0
 BuildRequires:	libseat-devel
@@ -31,6 +37,8 @@ Requires:	pipewire-libs >= 0.3.33
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_enable_debug_packages	0
+
+%define		filterout_c	-fvar-tracking-assignments
 
 %description
 niri is a scrollable-tiling Wayland compositor. Windows are arranged
@@ -71,12 +79,24 @@ EOF
 
 %build
 export CARGO_HOME="$(pwd)/.cargo"
+export BINDGEN_EXTRA_CLANG_ARGS="%{rpmcflags} %{rpmcppflags}"
+%ifnarch x32
+export LIBCLANG_PATH="%{_libdir}"
+%else
+export LIBCLANG_PATH=/usr/lib64
+%endif
 
 %cargo_build --frozen
 
 %install
 rm -rf $RPM_BUILD_ROOT
 export CARGO_HOME="$(pwd)/.cargo"
+export BINDGEN_EXTRA_CLANG_ARGS="%{rpmcflags} %{rpmcppflags}"
+%ifnarch x32
+export LIBCLANG_PATH="%{_libdir}"
+%else
+export LIBCLANG_PATH=/usr/lib64
+%endif
 
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_datadir}/wayland-sessions,%{_datadir}/xdg-desktop-portal,%{systemduserunitdir}}
 
