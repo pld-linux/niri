@@ -29,6 +29,8 @@ Requires:	libinput >= 1.21.0
 Requires:	pipewire-libs >= 0.3.33
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		_enable_debug_packages	0
+
 %description
 niri is a scrollable-tiling Wayland compositor. Windows are arranged
 in columns on an infinite strip going to the right. Opening a new
