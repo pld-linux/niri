@@ -11,6 +11,7 @@ Source1:	%{name}-crates-%{version}.tar.xz
 URL:		https://github.com/YaLTeR/niri
 BuildRequires:	Mesa-libgbm-devel
 BuildRequires:	cairo-devel
+BuildRequires:	cairo-gobject-devel
 BuildRequires:	cargo
 BuildRequires:	libdisplay-info-devel >= 0.2
 BuildRequires:	libinput-devel >= 1.21.0
